@@ -1,0 +1,203 @@
+@startuml  
+' Define the SmartRoom class
+class SmartRoom {
+    +id: String
+    +name: String
+    +imageUrl: String
+    +temperature: double
+    +airHumidity: double
+    +lights: SmartDevice
+    +airCondition: SmartDevice
+    +timer: SmartDevice
+    +musicInfo: MusicInfo
+    +SmartRoom({required String id, required String name, required String imageUrl, required double temperature, required double airHumidity, required SmartDevice lights, required SmartDevice airCondition, required SmartDevice timer, required MusicInfo musicInfo})
+    +copyWith({String? id, String? name, String? imageUrl, double? temperature, double? airHumidity, SmartDevice? lights, SmartDevice? airCondition, SmartDevice? timer, MusicInfo? musicInfo}) : SmartRoom
+    +static fakeValues: List<SmartRoom>
+}
+
+' Define specific rooms as subclasses of Room
+class LivingRoom extends SmartRoom {
+}
+
+class DiningRoom extends SmartRoom {
+}
+
+class BathRoom extends SmartRoom {
+}
+
+class BedRoom extends SmartRoom {
+}
+
+class Kitchen extends SmartRoom {
+}
+
+' Define the Music class storing title and artist name
+class Music {
+    +title: String
+    +artist: String
+}
+
+' Define the MusicInfo class
+class MusicInfo {
+    +isOn: bool
+    +currentSong: Song
+}
+
+' Define the Song class
+class Song {
+    +title: String
+    +artist: String
+    +duration: int
+    +static defaultSong: Song
+}
+
+
+
+' Define separate classes to manage AC temperature and light intensity
+class ACManager {
+    +manageACTemperature(temperature: int)
+}
+
+class LightIntensityManager {
+    +manageLightIntensity(intensity: int)
+}
+
+' Define the abstract RoomDetailsPageView class that manages SmartDevice, Music, AC temperature, and light intensity
+abstract class RoomDetailsPageView {
+    +smartDevice: SmartDevice
+    +music: Music
+    +acManager: ACManager
+    +lightIntensityManager: LightIntensityManager
+    +manageMusic(title: String, artist: String)
+    +manageDevice(isOn: bool)
+}
+
+' Define the SmartDevice class
+class SmartDevice {
+    -isOn: bool
+    -value: int
+    +SmartDeviceController({required bool isOn, required int value})
+}
+
+class LightsAndTimerSwitchers {
+  - SmartRoom room
+  + createState(): _LightsAndTimerSwitchersState
+}
+
+class _LightsAndTimerSwitchersState {
+  - CountDownController _controller
+  + _showTimerDialog(BuildContext context)
+}
+
+
+class Timer {
+  + bool isOn
+}
+
+LightsAndTimerSwitchers -> SmartRoom
+_LightsAndTimerSwitchersState --> CountDownController
+LightsAndTimerSwitchers -> _LightsAndTimerSwitchersState
+
+' Define the relationships
+SmartRoom <|-- LivingRoom
+SmartRoom <|-- DiningRoom
+SmartRoom <|-- BathRoom
+SmartRoom <|-- BedRoom
+SmartRoom <|-- Kitchen
+SmartRoom <|-- Terrace
+
+RoomDetailsPageView *-- SmartDevice
+RoomDetailsPageView *-- Music
+RoomDetailsPageView *-- ACManager
+RoomDetailsPageView *-- LightIntensityManager
+RoomDetailsPageView *-- Timer
+SmartRoom *-- RoomDetailsPageView
+SmartRoom *-- SmartDevice
+SmartRoom *-- MusicInfo
+MusicInfo *-- Song
+
+@enduml
+
+' @startuml
+
+' ' Define the abstract Room class with common attributes and methods
+' abstract class Room {
+'     +name: String
+'     +airHumidity: int
+'     +temperature: int
+'     +timer: int
+'     +setAirHumidity(humidity: int)
+'     +setTimer(time: int)
+' }
+
+' ' Define specific rooms as subclasses of Room
+' class LivingRoom extends Room {
+' }
+
+' class DiningRoom extends Room {
+' }
+
+' class BathRoom extends Room {
+' }
+
+' class BedRoom extends Room {
+' }
+
+' class Kitchen extends Room {
+' }
+
+' ' Define the SmartDevice class with on and off features
+' class SmartDevice {
+'     +isOn: bool
+'     +turnOn() : void
+'     +turnOff() : void
+' }
+
+' ' Define the Music class storing title and artist name
+' class Music {
+'     +title: String
+'     +artist: String
+'     +thumbUrl: String
+' }
+
+' ' Define separate classes to manage AC temperature and light intensity
+' class ACManager {
+'     +manageACTemperature(temperature: int)
+' }
+
+' class LightIntensityManager {
+'     +manageLightIntensity(intensity: int)
+' }
+
+' ' Define the abstract RoomDetailsPageView class that manages SmartDevice, Music, AC temperature, and light intensity
+' abstract class RoomDetailsPageView {
+'     +smartDevice: SmartDevice
+'     +music: Music
+'     +acManager: ACManager
+'     +lightIntensityManager: LightIntensityManager
+'     +manageMusic(title: String, artist: String)
+'     +manageDevice(isOn: bool)
+' }
+
+' ' Define the SmartDeviceController class
+' class SmartDeviceController {
+'     -isOn: bool
+'     -value: int
+'     +SmartDeviceController({required bool isOn, required int value})
+' }
+
+' ' Define the relationships
+' Room <|-- LivingRoom
+' Room <|-- DiningRoom
+' Room <|-- BathRoom
+' Room <|-- BedRoom
+' Room <|-- Kitchen
+
+' RoomDetailsPageView *-- SmartDevice
+' RoomDetailsPageView *-- Music
+' RoomDetailsPageView *-- ACManager
+' RoomDetailsPageView *-- LightIntensityManager
+' Room *-- RoomDetailsPageView
+' SmartDeviceController *-- SmartDevice
+
+' @enduml
